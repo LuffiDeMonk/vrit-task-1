@@ -2,6 +2,7 @@ import React from "react"
 import Link from "next/link"
 import { ShoppingBag } from "lucide-react"
 import { HeaderNav } from "@/components/common/header-nav"
+import { MobileNav } from "@/components/common/mobile-nav"
 import { ThemeToggle } from "@/components/common/theme-toggle"
 import { CartBadge } from "@/components/common/cart-badge"
 import { UserMenu } from "@/components/common/user-menu"
@@ -26,9 +27,12 @@ export function Header() {
         <HeaderNav />
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <ThemeToggle />
-          <CartBadge />
-          <UserMenu />
+          <div className="hidden items-center gap-2 sm:gap-3 md:flex">
+            <ThemeToggle />
+            <CartBadge />
+            <UserMenu />
+          </div>
+          <MobileNav />
         </div>
       </div>
     </header>

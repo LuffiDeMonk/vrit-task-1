@@ -22,6 +22,7 @@ export interface InputProps extends ComponentProps<typeof InputGroupInput> {
   endIcon?: ReactNode
   preventSqlInjection?: boolean
   sqlInjectionPatterns?: RegExp[]
+  inputClassName?: string
 }
 
 const DEFAULT_SQL_PATTERNS: RegExp[] = [
@@ -52,6 +53,7 @@ export function Input({
   endIcon,
   preventSqlInjection = false,
   sqlInjectionPatterns = [],
+  inputClassName,
   onChange,
   id,
   ...props
@@ -123,7 +125,7 @@ export function Input({
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0">
       {label && (
         <Label
           htmlFor={inputId}
@@ -136,11 +138,22 @@ export function Input({
 
       <InputGroup className={className}>
         {startIcon && (
-          <InputGroupAddon align="inline-start">{startIcon}</InputGroupAddon>
+          <InputGroupAddon align="inline-start" className="shrink-0">
+            {startIcon}
+          </InputGroupAddon>
         )}
-        <InputGroupInput {...controlProps} />
+        <InputGroupInput
+          className={cn(
+            className?.includes("text-xs") && "text-xs placeholder:text-xs",
+            className?.includes("text-sm") && "text-sm placeholder:text-sm",
+            inputClassName
+          )}
+          {...controlProps}
+        />
         {endIcon && (
-          <InputGroupAddon align="inline-end">{endIcon}</InputGroupAddon>
+          <InputGroupAddon align="inline-end" className="shrink-0">
+            {endIcon}
+          </InputGroupAddon>
         )}
       </InputGroup>
 

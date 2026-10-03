@@ -3,10 +3,9 @@ import Link from "next/link"
 import { Badge } from "@/components/shared/badge"
 import { StarRating } from "@/components/common/star-rating"
 import { buttonVariants } from "@/components/shared/button"
-import { Truck, ShieldCheck, ArrowRight } from "lucide-react"
-import { AddToCartButton } from "@/app/products/[id]/_components/add-to-cart-button"
 import { cn } from "@/lib/utils"
 import type { Product } from "@/types/product"
+import { AddToCartButton } from "./add-to-cart-button"
 
 interface ProductInfoProps {
   product: Product
@@ -46,7 +45,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
         </span>
         <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
           <span className="flex size-2 animate-pulse rounded-full bg-emerald-500" />
-          <span>In Stock ({product.rating?.count || 50} units left)</span>
+          <span>In Stock</span>
         </div>
       </div>
 
@@ -73,23 +72,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
             )}
           >
             <span>Continue Shopping</span>
-            <ArrowRight className="size-4" />
           </Link>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 gap-3 border-t border-border/60 pt-4 sm:grid-cols-2">
-        <div className="flex items-center gap-2.5 text-xs text-muted-foreground">
-          <div className="flex size-7 items-center justify-center rounded-md bg-muted text-foreground">
-            <Truck className="size-4" />
-          </div>
-          <span>Free express shipping on all orders</span>
-        </div>
-        <div className="flex items-center gap-2.5 text-xs text-muted-foreground">
-          <div className="flex size-7 items-center justify-center rounded-md bg-muted text-foreground">
-            <ShieldCheck className="size-4" />
-          </div>
-          <span>30-day money-back guarantee</span>
         </div>
       </div>
     </div>

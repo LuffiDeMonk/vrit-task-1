@@ -19,7 +19,7 @@ export interface AvatarProps extends React.ComponentPropsWithoutRef<
   fallbackClassName?: string
 }
 
-export function getInitials(name?: string | null): string {
+export function getInitials(name?: string | null) {
   if (!name || typeof name !== "string") return ""
   const trimmed = name.trim()
   if (!trimmed) return ""

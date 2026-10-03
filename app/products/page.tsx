@@ -1,6 +1,7 @@
 import React from "react"
 import { getProducts, getCategories } from "@/lib/api/products"
 import { ProductGrid } from "@/app/products/_components/product-grid"
+import { Breadcrumb } from "@/components/shared/breadcrumb"
 import type { SortOrder } from "@/types/product"
 
 interface ProductsPageProps {
@@ -31,16 +32,24 @@ export default async function ProductsPage({
     getCategories(),
   ])
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "All Products", href: "/products" },
+    ...(resolvedSearchParams.category && resolvedSearchParams.category !== "all"
+      ? [
+          {
+            label:
+              resolvedSearchParams.category.charAt(0).toUpperCase() +
+              resolvedSearchParams.category.slice(1),
+          },
+        ]
+      : []),
+  ]
+
   return (
-    <div className="container mx-auto px-4 py-8 sm:px-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-          Products Catalog
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Browse our catalog with instant category filtering, price ranges,
-          search, and server-side sorting.
-        </p>
+    <div className="container mx-auto w-full px-3 py-3 sm:px-6 sm:py-5">
+      <div className="mb-3">
+        <Breadcrumb items={breadcrumbItems} />
       </div>
 
       <ProductGrid products={products} categories={categories} />

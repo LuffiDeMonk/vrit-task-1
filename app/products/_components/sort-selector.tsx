@@ -6,22 +6,35 @@ import { SlidersHorizontal } from "lucide-react"
 import { Select, type SelectOption } from "@/components/shared/select"
 
 const SORT_SELECT_OPTIONS: SelectOption[] = [
-  { label: "Default Order", value: "default" },
-  { label: "API Sort: Ascending (?sort=asc)", value: "asc" },
-  { label: "API Sort: Descending (?sort=desc)", value: "desc" },
+  { label: "Featured", value: "asc" },
   { label: "Price: Low to High", value: "price-asc" },
   { label: "Price: High to Low", value: "price-desc" },
+  { label: "Avg. Customer Review", value: "rating-desc" },
+  { label: "Newest Arrivals", value: "desc" },
 ]
 
-export function SortSelector() {
+interface SortSelectorProps {
+  value?: string
+  onValueChange?: (value: string) => void
+}
+
+export function SortSelector({
+  value: propValue,
+  onValueChange: propOnValueChange,
+}: SortSelectorProps = {}) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
 
-  const currentSort = searchParams.get("sort") || "default"
+  const currentSort = propValue ?? (searchParams.get("sort") || "default")
 
   const handleSortChange = (value: string | null) => {
+    if (propOnValueChange) {
+      propOnValueChange(value && value !== "default" ? value : "")
+      return
+    }
+
     const params = new URLSearchParams(searchParams.toString())
 
     if (value && value !== "default") {
@@ -50,10 +63,10 @@ export function SortSelector() {
           value={currentSort}
           onValueChange={handleSortChange}
           placeholder="Default Order"
-          disabled={isPending}
+          disabled={!propOnValueChange && isPending}
           className="h-8 min-h-8 rounded-lg border-border px-2.5 py-1 text-xs"
         />
-        {isPending && (
+        {!propOnValueChange && isPending && (
           <span className="absolute -top-1 -right-1 z-10 flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>

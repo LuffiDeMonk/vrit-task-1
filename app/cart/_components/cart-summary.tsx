@@ -1,17 +1,8 @@
 "use client"
 
 import React, { useState } from "react"
-import Link from "next/link"
-import {
-  ShieldCheck,
-  Truck,
-  ArrowRight,
-  RotateCcw,
-  CheckCircle2,
-} from "lucide-react"
-import { Button, buttonVariants } from "@/components/shared/button"
+import { Button } from "@/components/shared/button"
 import { Card } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
 
 interface CartSummaryProps {
   totalItems: number
@@ -49,16 +40,6 @@ export function CartSummary({
         </div>
 
         <div className="flex justify-between text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <Truck className="size-3.5" />
-            Express Shipping
-          </span>
-          <span className="text-xs font-semibold text-emerald-600 uppercase dark:text-emerald-400">
-            Free
-          </span>
-        </div>
-
-        <div className="flex justify-between text-muted-foreground">
           <span>Estimated Sales Tax</span>
           <span className="font-semibold text-foreground">$0.00</span>
         </div>
@@ -79,48 +60,21 @@ export function CartSummary({
           variant={isCheckedOut ? "success" : "default"}
           onClick={handleCheckout}
           disabled={isCheckedOut || totalItems === 0}
-          className="w-full font-bold shadow-xs"
+          className="w-full font-bold"
         >
-          {isCheckedOut ? (
-            <span className="flex items-center gap-2">
-              <CheckCircle2 className="size-4 animate-in zoom-in" />
-              Order Placed Successfully!
-            </span>
-          ) : (
-            <span className="flex items-center gap-2">
-              <span>Proceed to Checkout</span>
-              <ArrowRight className="size-4" />
-            </span>
-          )}
+          {isCheckedOut ? "Order Placed Successfully!" : "Proceed to Checkout"}
         </Button>
 
-        <div className="flex items-center justify-between pt-1">
-          <Button
-            type="button"
-            variant="ghost"
-            size="xs"
-            onClick={onClearCart}
-            className="gap-1 px-2 text-xs text-muted-foreground hover:text-destructive"
-          >
-            <RotateCcw className="size-3" />
-            Clear Cart
-          </Button>
-
-          <Link
-            href="/products"
-            className={cn(
-              buttonVariants({ variant: "link", size: "xs" }),
-              "text-xs text-muted-foreground hover:text-foreground"
-            )}
-          >
-            Continue Shopping
-          </Link>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2 border-t border-border/40 pt-4 text-[11px] text-muted-foreground">
-        <ShieldCheck className="size-4 shrink-0 text-emerald-600" />
-        <span>Secure client-side checkout simulation. No charge made.</span>
+        <Button
+          type="button"
+          variant="outline"
+          size="lg"
+          onClick={onClearCart}
+          disabled={isCheckedOut || totalItems === 0}
+          className="w-full font-medium text-muted-foreground hover:border-destructive/30 hover:bg-destructive/10 hover:text-destructive"
+        >
+          Clear Cart
+        </Button>
       </div>
     </Card>
   )

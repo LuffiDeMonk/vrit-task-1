@@ -61,7 +61,11 @@ export function Alert({
       ref={ref}
       variant={variant}
       size={size}
-      className={cn(resolvedIcon && "flex items-start gap-3", className)}
+      // className={cn(resolvedIcon && "flex items-start gap-3", className)}
+      className={cn({
+        "flex items-start gap-3": resolvedIcon,
+        className,
+      })}
       {...props}
     >
       {resolvedIcon && (
@@ -88,5 +92,5 @@ export function Alert({
   )
 }
 
-export { AlertTitle, AlertDescription, alertVariants }
+export { alertVariants }
 export default Alert

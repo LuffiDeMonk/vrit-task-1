@@ -27,7 +27,7 @@ export function AuthGuard({
 
   if (!isHydrated) {
     return (
-      <div className="container mx-auto max-w-4xl space-y-6 px-4 py-12 sm:px-6">
+      <div className="container mx-auto space-y-6 px-4 py-8 sm:px-6">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-64 w-full rounded-xl" />
       </div>
@@ -36,7 +36,7 @@ export function AuthGuard({
 
   if (!isAuthenticated) {
     return (
-      <div className="container mx-auto max-w-4xl space-y-6 px-4 py-12 sm:px-6">
+      <div className="container mx-auto space-y-6 px-4 py-8 sm:px-6">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-64 w-full rounded-xl" />
       </div>

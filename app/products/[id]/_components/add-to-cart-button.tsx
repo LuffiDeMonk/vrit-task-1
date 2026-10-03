@@ -97,12 +97,6 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
           {ctaLabel}
         </Button>
       </div>
-
-      {isHydrated && !isAuthenticated && (
-        <p className="text-xs text-amber-600 dark:text-amber-400">
-          * Please sign in to manage your shopping cart.
-        </p>
-      )}
     </div>
   )
 }

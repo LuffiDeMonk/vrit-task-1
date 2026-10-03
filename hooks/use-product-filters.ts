@@ -1,7 +1,7 @@
 "use client"
 
-import { useMemo, useCallback } from "react"
-import { useRouter, useSearchParams, usePathname } from "next/navigation"
+import { useState, useMemo, useCallback, useEffect } from "react"
+import { useSearchParams, usePathname } from "next/navigation"
 import type { Product } from "@/types/product"
 import { ITEMS_PER_PAGE } from "@/lib/constants"
 
@@ -10,16 +10,8 @@ interface UseProductFiltersProps {
 }
 
 export function useProductFilters({ products }: UseProductFiltersProps) {
-  const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-
-  const currentCategory = searchParams.get("category") || "all"
-  const currentSearch = searchParams.get("search") || ""
-  const currentMinPriceStr = searchParams.get("minPrice")
-  const currentMaxPriceStr = searchParams.get("maxPrice")
-  const currentSort = searchParams.get("sort") || ""
-  const currentPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10))
 
   const { minPossiblePrice, maxPossiblePrice } = useMemo(() => {
     if (!products.length) return { minPossiblePrice: 0, maxPossiblePrice: 1000 }
@@ -30,23 +22,103 @@ export function useProductFilters({ products }: UseProductFiltersProps) {
     }
   }, [products])
 
-  const currentMinPrice = currentMinPriceStr
-    ? parseFloat(currentMinPriceStr)
-    : minPossiblePrice
-  const currentMaxPrice = currentMaxPriceStr
-    ? parseFloat(currentMaxPriceStr)
-    : maxPossiblePrice
+  // Local state initialized from searchParams for INSTANT (0ms) UI updates
+  const [currentCategory, setCategoryState] = useState<string>(
+    () => searchParams.get("category") || "all"
+  )
+  const [currentSearch, setSearchState] = useState<string>(
+    () => searchParams.get("search") || ""
+  )
+  const [currentMinPrice, setMinPriceState] = useState<number>(() => {
+    const minParam = searchParams.get("minPrice")
+    return minParam ? parseFloat(minParam) : minPossiblePrice
+  })
+  const [currentMaxPrice, setMaxPriceState] = useState<number>(() => {
+    const maxParam = searchParams.get("maxPrice")
+    return maxParam ? parseFloat(maxParam) : maxPossiblePrice
+  })
+  const [currentSort, setSortState] = useState<string>(
+    () => searchParams.get("sort") || ""
+  )
+  const [currentMinRating, setMinRatingState] = useState<number>(() => {
+    const ratingParam = searchParams.get("rating")
+    return ratingParam ? parseFloat(ratingParam) : 0
+  })
+  const [currentPage, setPageState] = useState<number>(() =>
+    Math.max(1, parseInt(searchParams.get("page") || "1", 10))
+  )
 
-  const createQueryString = useCallback(
+  // Synchronize local state whenever searchParams changes externally (e.g. navbar links)
+  useEffect(() => {
+    const nextCategory = searchParams.get("category") || "all"
+    const nextSearch = searchParams.get("search") || ""
+    const nextMinParam = searchParams.get("minPrice")
+    const nextMin = nextMinParam ? parseFloat(nextMinParam) : minPossiblePrice
+    const nextMaxParam = searchParams.get("maxPrice")
+    const nextMax = nextMaxParam ? parseFloat(nextMaxParam) : maxPossiblePrice
+    const nextSort = searchParams.get("sort") || ""
+    const nextRatingParam = searchParams.get("rating")
+    const nextRating = nextRatingParam ? parseFloat(nextRatingParam) : 0
+    const nextPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10))
+
+    setCategoryState(nextCategory)
+    setSearchState(nextSearch)
+    setMinPriceState(nextMin)
+    setMaxPriceState(nextMax)
+    setSortState(nextSort)
+    setMinRatingState(nextRating)
+    setPageState(nextPage)
+  }, [searchParams, minPossiblePrice, maxPossiblePrice])
+
+  // Synchronize with browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      if (typeof window === "undefined") return
+      const params = new URLSearchParams(window.location.search)
+      const popCategory = params.get("category") || "all"
+      const popSearch = params.get("search") || ""
+      const popMin = params.get("minPrice")
+        ? parseFloat(params.get("minPrice")!)
+        : minPossiblePrice
+      const popMax = params.get("maxPrice")
+        ? parseFloat(params.get("maxPrice")!)
+        : maxPossiblePrice
+      const popSort = params.get("sort") || ""
+      const popRating = params.get("rating")
+        ? parseFloat(params.get("rating")!)
+        : 0
+      const popPage = Math.max(1, parseInt(params.get("page") || "1", 10))
+
+      setCategoryState(popCategory)
+      setSearchState(popSearch)
+      setMinPriceState(popMin)
+      setMaxPriceState(popMax)
+      setSortState(popSort)
+      setMinRatingState(popRating)
+      setPageState(popPage)
+    }
+
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [minPossiblePrice, maxPossiblePrice])
+
+  // Helper to instantly update URL bar in the background without triggering blocking RSC round-trips
+  const syncUrl = useCallback(
     (paramsToUpdate: Record<string, string | number | null>) => {
-      const params = new URLSearchParams(searchParams.toString())
+      if (typeof window === "undefined") return
+
+      const params = new URLSearchParams(
+        window.location.search || searchParams.toString()
+      )
 
       Object.entries(paramsToUpdate).forEach(([key, value]) => {
         if (
           value === null ||
           value === undefined ||
           value === "" ||
-          value === "all"
+          value === "all" ||
+          value === "default" ||
+          value === 0
         ) {
           params.delete(key)
         } else {
@@ -54,19 +126,11 @@ export function useProductFilters({ products }: UseProductFiltersProps) {
         }
       })
 
-      return params.toString()
-    },
-    [searchParams]
-  )
-
-  const updateFilters = useCallback(
-    (updates: Record<string, string | number | null>, resetPage = true) => {
-      const updatesWithPage = resetPage ? { ...updates, page: null } : updates
-      const queryString = createQueryString(updatesWithPage)
+      const queryString = params.toString()
       const targetUrl = queryString ? `${pathname}?${queryString}` : pathname
-      router.push(targetUrl, { scroll: false })
+      window.history.replaceState(null, "", targetUrl)
     },
-    [createQueryString, pathname, router]
+    [pathname, searchParams]
   )
 
   const filteredProducts = useMemo(() => {
@@ -93,6 +157,13 @@ export function useProductFilters({ products }: UseProductFiltersProps) {
         return false
       }
 
+      if (currentMinRating > 0) {
+        const rate = product.rating?.rate || 0
+        if (rate < currentMinRating) {
+          return false
+        }
+      }
+
       return true
     })
 
@@ -104,6 +175,8 @@ export function useProductFilters({ products }: UseProductFiltersProps) {
       result.sort((a, b) => a.price - b.price)
     } else if (currentSort === "price-desc") {
       result.sort((a, b) => b.price - a.price)
+    } else if (currentSort === "rating-desc") {
+      result.sort((a, b) => (b.rating?.rate || 0) - (a.rating?.rate || 0))
     }
 
     return result
@@ -113,6 +186,7 @@ export function useProductFilters({ products }: UseProductFiltersProps) {
     currentSearch,
     currentMinPrice,
     currentMaxPrice,
+    currentMinRating,
     currentSort,
   ])
 
@@ -126,58 +200,163 @@ export function useProductFilters({ products }: UseProductFiltersProps) {
   }, [filteredProducts, safeCurrentPage])
 
   const setCategory = useCallback(
-    (category: string) => updateFilters({ category }),
-    [updateFilters]
+    (category: string) => {
+      const normalizedCategory = category || "all"
+      setCategoryState(normalizedCategory)
+      setPageState(1)
+      syncUrl({ category: normalizedCategory, page: null })
+    },
+    [syncUrl]
   )
 
   const setSearch = useCallback(
-    (search: string) => updateFilters({ search }),
-    [updateFilters]
+    (search: string) => {
+      setSearchState(search)
+      setPageState(1)
+      syncUrl({ search, page: null })
+    },
+    [syncUrl]
   )
 
   const setPriceRange = useCallback(
-    (min: number, max: number) =>
-      updateFilters({
+    (min: number, max: number) => {
+      setMinPriceState(min)
+      setMaxPriceState(max)
+      setPageState(1)
+      syncUrl({
         minPrice: min === minPossiblePrice ? null : min,
         maxPrice: max === maxPossiblePrice ? null : max,
-      }),
-    [updateFilters, minPossiblePrice, maxPossiblePrice]
+        page: null,
+      })
+    },
+    [syncUrl, minPossiblePrice, maxPossiblePrice]
+  )
+
+  const setMinRating = useCallback(
+    (rating: number) => {
+      const validRating = Math.max(0, Math.min(5, rating))
+      setMinRatingState(validRating)
+      setPageState(1)
+      syncUrl({
+        rating: validRating > 0 ? validRating : null,
+        page: null,
+      })
+    },
+    [syncUrl]
+  )
+
+  const applyFilters = useCallback(
+    ({
+      category,
+      minPrice,
+      maxPrice,
+      minRating,
+    }: {
+      category?: string
+      minPrice?: number
+      maxPrice?: number
+      minRating?: number
+    }) => {
+      const updates: Record<string, string | number | null> = { page: null }
+
+      if (category !== undefined) {
+        const normalizedCategory = category || "all"
+        setCategoryState(normalizedCategory)
+        updates.category = normalizedCategory
+      }
+
+      if (minPrice !== undefined) {
+        setMinPriceState(minPrice)
+        updates.minPrice = minPrice === minPossiblePrice ? null : minPrice
+      }
+
+      if (maxPrice !== undefined) {
+        setMaxPriceState(maxPrice)
+        updates.maxPrice = maxPrice === maxPossiblePrice ? null : maxPrice
+      }
+
+      if (minRating !== undefined) {
+        const validRating = Math.max(0, Math.min(5, minRating))
+        setMinRatingState(validRating)
+        updates.rating = validRating > 0 ? validRating : null
+      }
+
+      setPageState(1)
+      syncUrl(updates)
+    },
+    [syncUrl, minPossiblePrice, maxPossiblePrice]
   )
 
   const setSort = useCallback(
-    (sort: string) => updateFilters({ sort }),
-    [updateFilters]
+    (sort: string) => {
+      setSortState(sort)
+      setPageState(1)
+      syncUrl({ sort, page: null })
+    },
+    [syncUrl]
   )
 
   const setPage = useCallback(
-    (page: number) => updateFilters({ page: page <= 1 ? null : page }, false),
-    [updateFilters]
+    (page: number) => {
+      const validPage = Math.max(1, page)
+      setPageState(validPage)
+      syncUrl({ page: validPage <= 1 ? null : validPage })
+    },
+    [syncUrl]
   )
 
   const resetFilters = useCallback(() => {
-    const params = new URLSearchParams(searchParams.toString())
-    params.delete("category")
-    params.delete("search")
-    params.delete("minPrice")
-    params.delete("maxPrice")
-    params.delete("page")
-    const query = params.toString()
-    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false })
-  }, [pathname, router, searchParams])
+    setCategoryState("all")
+    setSearchState("")
+    setMinPriceState(minPossiblePrice)
+    setMaxPriceState(maxPossiblePrice)
+    setMinRatingState(0)
+    setPageState(1)
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(
+        window.location.search || searchParams.toString()
+      )
+      params.delete("category")
+      params.delete("search")
+      params.delete("minPrice")
+      params.delete("maxPrice")
+      params.delete("rating")
+      params.delete("page")
+      const query = params.toString()
+      const targetUrl = query ? `${pathname}?${query}` : pathname
+      window.history.replaceState(null, "", targetUrl)
+    }
+  }, [minPossiblePrice, maxPossiblePrice, pathname, searchParams])
 
   const activeFilterCount = useMemo(() => {
     let count = 0
     if (currentCategory && currentCategory !== "all") count++
     if (currentSearch.trim()) count++
-    if (currentMinPriceStr || currentMaxPriceStr) count++
+    if (
+      currentMinPrice !== minPossiblePrice ||
+      currentMaxPrice !== maxPossiblePrice
+    ) {
+      count++
+    }
+    if (currentMinRating > 0) count++
     return count
-  }, [currentCategory, currentSearch, currentMinPriceStr, currentMaxPriceStr])
+  }, [
+    currentCategory,
+    currentSearch,
+    currentMinPrice,
+    currentMaxPrice,
+    currentMinRating,
+    minPossiblePrice,
+    maxPossiblePrice,
+  ])
 
   return {
     currentCategory,
     currentSearch,
     currentMinPrice,
     currentMaxPrice,
+    currentMinRating,
     currentSort,
     minPossiblePrice,
     maxPossiblePrice,
@@ -192,6 +371,8 @@ export function useProductFilters({ products }: UseProductFiltersProps) {
     setCategory,
     setSearch,
     setPriceRange,
+    setMinRating,
+    applyFilters,
     setSort,
     setPage,
     resetFilters,

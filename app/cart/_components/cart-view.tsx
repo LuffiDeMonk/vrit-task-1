@@ -24,7 +24,7 @@ function CartContent() {
 
   if (!isHydrated) {
     return (
-      <div className="container mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+      <div className="container mx-auto space-y-6 px-4 py-8 sm:px-6">
         <div className="h-8 w-48 animate-pulse rounded-md bg-muted" />
         <div className="h-64 w-full animate-pulse rounded-xl bg-muted" />
       </div>
@@ -32,7 +32,7 @@ function CartContent() {
   }
 
   return (
-    <div className="container mx-auto max-w-5xl px-4 py-8 sm:px-6">
+    <div className="container mx-auto px-4 py-8 sm:px-6">
       <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <Link

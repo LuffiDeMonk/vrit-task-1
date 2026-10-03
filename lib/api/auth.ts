@@ -27,6 +27,10 @@ export async function loginUser(
         token,
       }
     }
+    return {
+      success: false,
+      message: "No token returned from server.",
+    }
   }
 
   if (
@@ -42,18 +46,11 @@ export async function loginUser(
     }
   }
 
-  if (!result.ok) {
-    return {
-      success: false,
-      message:
-        result.status === 400 || result.status === 401
-          ? "Invalid username or password. Please check your credentials."
-          : result.message || "Failed to authenticate with login API.",
-    }
-  }
-
   return {
     success: false,
-    message: "Unexpected response received from authentication server.",
+    message:
+      result.status === 400 || result.status === 401
+        ? "Invalid username or password. Please check your credentials."
+        : result.message || "Failed to authenticate with login API.",
   }
 }

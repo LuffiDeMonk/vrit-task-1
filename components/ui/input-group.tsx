@@ -164,7 +164,7 @@ function InputGroupInput({
       onKeyDown={handleKeyDown}
       onPaste={handlePaste}
       className={cn(
-        "h-10 flex-1 rounded-none border-0 bg-transparent px-3 text-base shadow-none ring-0 outline-none placeholder:truncate placeholder:text-xs placeholder:text-muted-foreground focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0 sm:text-sm sm:placeholder:text-sm dark:bg-transparent dark:disabled:bg-transparent",
+        "h-full min-w-0 flex-1 rounded-none border-0 bg-transparent px-3 text-base shadow-none ring-0 outline-none placeholder:truncate placeholder:text-xs placeholder:text-muted-foreground focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0 sm:text-sm sm:placeholder:text-sm dark:bg-transparent dark:disabled:bg-transparent",
         type === "number" &&
           "[appearance:textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:hidden [&::-webkit-inner-spin-button]:[-webkit-appearance:none] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:hidden [&::-webkit-outer-spin-button]:[-webkit-appearance:none]",
         className

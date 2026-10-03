@@ -2,13 +2,6 @@ import { apiClient } from "@/lib/api/client"
 import { MOCK_CATEGORIES, MOCK_PRODUCTS } from "@/lib/api/mock-products"
 import type { Category, Product, SortOrder } from "@/types/product"
 
-interface DummyJsonProductResponse {
-  products: Record<string, unknown>[]
-  total: number
-  skip: number
-  limit: number
-}
-
 function normalizeProduct(raw: Record<string, unknown>): Product {
   const rawRating = raw.rating
   const ratingRate =
@@ -62,36 +55,20 @@ export async function getProducts(
 
   if (sort === "asc" || sort === "desc") {
     params.sort = sort
-    params.order = sort
-    params.sortBy = "price"
   }
 
-  const result = await apiClient<
-    DummyJsonProductResponse | Record<string, unknown>[]
-  >("/products", {
+  const result = await apiClient<Record<string, unknown>[]>("/products", {
     params,
-    cache: fetchOptions?.cache ?? "no-store", // SSR data fetching by default
+    cache: fetchOptions?.cache ?? "no-store",
     next: fetchOptions?.next,
   })
 
-  if (result.ok && result.data) {
-    let rawList: Record<string, unknown>[] = []
-
-    if (Array.isArray(result.data)) {
-      rawList = result.data
-    } else if (
-      Array.isArray((result.data as DummyJsonProductResponse).products)
-    ) {
-      rawList = (result.data as DummyJsonProductResponse).products
-    }
-
-    if (rawList.length > 0) {
-      return rawList.map(normalizeProduct)
-    }
+  if (result.ok && Array.isArray(result.data) && result.data.length > 0) {
+    return result.data.map(normalizeProduct)
   }
 
   console.warn(
-    `[getProducts] Remote API returned status ${result.status} (${result.ok ? "empty" : result.message}). Using fallback data.`
+    `[getProducts] Remote API returned status ${result.status} (${result.ok ? "empty" : result.message}). Using fallback mock data.`
   )
 
   let fallback = [...MOCK_PRODUCTS]
@@ -130,29 +107,12 @@ export async function getProduct(id: number): Promise<Product | null> {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const result = await apiClient<Category[] | { slug: string; name: string }[]>(
-    "/products/categories",
-    { cache: "no-store" }
-  )
+  const result = await apiClient<Category[]>("/products/categories", {
+    cache: "no-store",
+  })
 
   if (result.ok && Array.isArray(result.data) && result.data.length > 0) {
-    return result.data.map((item) =>
-      typeof item === "string" ? item : (item as { slug: string }).slug
-    )
-  }
-
-  const backupResult = await apiClient<
-    Category[] | { slug: string; name: string }[]
-  >("/products/category-list", { cache: "no-store" })
-
-  if (
-    backupResult.ok &&
-    Array.isArray(backupResult.data) &&
-    backupResult.data.length > 0
-  ) {
-    return backupResult.data.map((item) =>
-      typeof item === "string" ? item : (item as { slug: string }).slug
-    )
+    return result.data
   }
 
   return MOCK_CATEGORIES
@@ -165,28 +125,16 @@ export async function getProductsByCategory(
   const params: Record<string, string | undefined> = {}
   if (sort === "asc" || sort === "desc") {
     params.sort = sort
-    params.order = sort
-    params.sortBy = "price"
   }
 
   const encodedCategory = encodeURIComponent(category)
-  const result = await apiClient<
-    DummyJsonProductResponse | Record<string, unknown>[]
-  >(`/products/category/${encodedCategory}`, { params, cache: "no-store" })
+  const result = await apiClient<Record<string, unknown>[]>(
+    `/products/category/${encodedCategory}`,
+    { params, cache: "no-store" }
+  )
 
-  if (result.ok && result.data) {
-    let rawList: Record<string, unknown>[] = []
-    if (Array.isArray(result.data)) {
-      rawList = result.data
-    } else if (
-      Array.isArray((result.data as DummyJsonProductResponse).products)
-    ) {
-      rawList = (result.data as DummyJsonProductResponse).products
-    }
-
-    if (rawList.length > 0) {
-      return rawList.map(normalizeProduct)
-    }
+  if (result.ok && Array.isArray(result.data) && result.data.length > 0) {
+    return result.data.map(normalizeProduct)
   }
 
   let fallback = MOCK_PRODUCTS.filter(

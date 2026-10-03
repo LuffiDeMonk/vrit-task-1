@@ -25,60 +25,24 @@ function isIconElement(element: ReactNode): boolean {
   if (!React.isValidElement(element)) return false
   if (element.type === "svg") return true
 
-  const anyType = element.type as any
-  if (typeof anyType === "string") return false
+  const type = element.type as any
+  const name =
+    typeof type === "function"
+      ? type.displayName || type.name || ""
+      : typeof type === "object" && type !== null
+        ? type.displayName || ""
+        : ""
 
-  if (typeof anyType === "function") {
-    const name = anyType.displayName || anyType.name || ""
-    if (
-      name.toLowerCase().includes("icon") ||
-      name.toLowerCase().includes("spinner")
-    ) {
-      return true
-    }
-  }
+  if (/icon|spinner/i.test(name)) return true
 
-  if (typeof anyType === "object" && anyType !== null) {
-    const name = anyType.displayName || anyType.name || ""
-    if (name && typeof name === "string") {
-      return true
-    }
-  }
+  const props = element.props as Record<string, any> | undefined
+  if (!props) return false
 
-  if (element.props && typeof element.props === "object") {
-    const p = element.props as Record<string, any>
-    if (
-      p["data-icon"] ||
-      p["aria-hidden"] === true ||
-      p["aria-hidden"] === "true"
-    ) {
-      return true
-    }
-    if (
-      typeof p.className === "string" &&
-      (p.className.includes("lucide") || p.className.includes("icon"))
-    ) {
-      return true
-    }
-  }
-
-  return false
-}
-
-function flattenChildren(children: ReactNode): ReactNode[] {
-  const result: ReactNode[] = []
-  React.Children.forEach(children, (child) => {
-    if (React.isValidElement(child) && child.type === React.Fragment) {
-      result.push(...flattenChildren((child.props as any).children))
-    } else if (
-      child !== null &&
-      child !== undefined &&
-      typeof child !== "boolean"
-    ) {
-      result.push(child)
-    }
-  })
-  return result
+  return (
+    Boolean(props["data-icon"]) ||
+    (typeof props.className === "string" &&
+      (props.className.includes("lucide") || props.className.includes("icon")))
+  )
 }
 
 export function Button({
@@ -154,10 +118,10 @@ export function Button({
     }
 
     if (loading) {
-      const flat = flattenChildren(children)
+      const childrenArray = React.Children.toArray(children)
       let replaced = false
 
-      const processed = flat.map((child, idx) => {
+      const processed = childrenArray.map((child, idx) => {
         if (!replaced && isIconElement(child)) {
           replaced = true
           const childProps = (child as React.ReactElement).props as Record<
@@ -171,7 +135,7 @@ export function Button({
           const marginMatch = childClassName.match(/\bm[rlebxyts]-\S+/g)
           const marginClass = marginMatch
             ? marginMatch.join(" ")
-            : flat.length > 1
+            : childrenArray.length > 1
               ? "mr-2"
               : ""
           return (

@@ -10,8 +10,8 @@ export const DEFAULT_TIMEOUT_MS = 10000
 
 export const SORT_OPTIONS = [
   { label: "Default Order", value: "" },
-  { label: "API Sort: Ascending (?sort=asc)", value: "asc" },
-  { label: "API Sort: Descending (?sort=desc)", value: "desc" },
+  { label: "Featured", value: "asc" },
+  { label: "Newest Arrivals", value: "desc" },
   { label: "Price: Low to High", value: "price-asc" },
   { label: "Price: High to Low", value: "price-desc" },
 ] as const
@@ -19,7 +19,7 @@ export const SORT_OPTIONS = [
 export const SITE_CONFIG = {
   name: "FakeStore Direct",
   description:
-    "Explore premium products with instant filtering, SSR performance, and modern Next.js architecture powered by Fake Store API.",
+    "Explore premium products with instant filtering, fast delivery, and modern design.",
 }
 
 export const DEMO_CREDENTIALS = {

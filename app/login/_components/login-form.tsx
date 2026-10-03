@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { LogIn, KeyRound, User, Sparkles } from "lucide-react"
+import { LogIn, KeyRound, User } from "lucide-react"
 import { Input } from "@/components/shared/input"
 import { Button } from "@/components/shared/button"
 import { Alert } from "@/components/shared/alert"
@@ -107,33 +107,15 @@ export function LoginForm() {
         </Button>
       </form>
 
-      <div className="mt-6 rounded-lg border border-dashed border-border bg-muted/30 p-3.5 text-xs">
-        <div className="mb-1.5 flex items-center justify-between">
-          <span className="flex items-center gap-1.5 font-semibold text-foreground">
-            <Sparkles className="size-3.5 text-amber-500" />
-            Demo Credentials
-          </span>
-          <Button
-            type="button"
-            variant="ghost"
-            size="xs"
-            onClick={handleFillDemo}
-            className="h-6 px-2 text-[11px] text-primary hover:text-primary/80"
-          >
-            Fill in form
-          </Button>
-        </div>
-        <p className="text-[11px] text-muted-foreground">
-          Username:{" "}
-          <code className="rounded bg-muted px-1 font-mono text-foreground">
-            {DEMO_CREDENTIALS.username}
-          </code>
-          {" · "}
-          Password:{" "}
-          <code className="rounded bg-muted px-1 font-mono text-foreground">
-            {DEMO_CREDENTIALS.password}
-          </code>
-        </p>
+      <div className="mt-6 text-center text-xs text-muted-foreground">
+        <span>Need demo access? </span>
+        <button
+          type="button"
+          onClick={handleFillDemo}
+          className="cursor-pointer font-medium text-primary underline underline-offset-4 hover:text-primary/80"
+        >
+          Autofill credentials
+        </button>
       </div>
     </Card>
   )

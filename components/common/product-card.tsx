@@ -1,7 +1,6 @@
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Badge } from "@/components/shared/badge"
 import { StarRating } from "@/components/common/star-rating"
 import { QuickAddToCart } from "@/components/common/quick-add-to-cart"
 import type { Product } from "@/types/product"
@@ -9,60 +8,139 @@ import type { Product } from "@/types/product"
 interface ProductCardProps {
   product: Product
   priority?: boolean
+  layout?: "grid" | "list"
 }
 
-export function ProductCard({ product, priority = false }: ProductCardProps) {
+export function ProductCard({
+  product,
+  priority = false,
+  layout = "grid",
+}: ProductCardProps) {
+  if (layout === "list") {
+    return (
+      <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card p-4 shadow-xs transition-all hover:border-primary/40 hover:shadow-md sm:flex-row sm:gap-5">
+        {/* Left Image Column - Clean with NO badges */}
+        <div className="relative flex aspect-square w-full shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white p-4 sm:h-48 sm:w-48">
+          <Image
+            src={product.image}
+            alt={product.title}
+            fill
+            sizes="(max-width: 640px) 100vw, 192px"
+            priority={priority}
+            className="object-contain p-2 transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+
+        {/* Right Info Column */}
+        <div className="flex flex-1 flex-col justify-between pt-3 sm:pt-0">
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+              <span className="capitalize">{product.category}</span>
+              {product.rating && (
+                <>
+                  <span>•</span>
+                  <div className="flex items-center gap-1">
+                    <StarRating
+                      rate={product.rating.rate}
+                      size="sm"
+                      showText={false}
+                    />
+                    <span className="font-medium text-foreground">
+                      {product.rating.rate.toFixed(1)}
+                    </span>
+                    <span>({product.rating.count} reviews)</span>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <h3 className="line-clamp-2 text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+              <Link
+                href={`/products/${product.id}`}
+                className="focus:outline-hidden"
+              >
+                {product.title}
+              </Link>
+            </h3>
+
+            {product.description && (
+              <p className="line-clamp-2 text-xs text-muted-foreground">
+                {product.description}
+              </p>
+            )}
+
+            <div className="mt-1">
+              <span className="text-xl font-bold text-foreground">
+                ${product.price.toFixed(2)}
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-4 flex items-center justify-end sm:mt-2">
+            <div className="w-full sm:w-44">
+              <QuickAddToCart product={product} fullWidth />
+            </div>
+          </div>
+        </div>
+      </article>
+    )
+  }
+
+  // Grid Layout
   return (
-    <article className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+    <article className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-border bg-card p-4 shadow-xs transition-all hover:border-primary/40 hover:shadow-md">
       <div>
-        <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden bg-white p-6">
+        {/* Product Image Frame - Clean with NO badges */}
+        <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg bg-white p-4">
           <Image
             src={product.image}
             alt={product.title}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             priority={priority}
-            className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+            className="object-contain p-2 transition-transform duration-300 group-hover:scale-105"
           />
-          <div className="absolute top-2.5 left-2.5">
-            <Badge
-              variant="secondary"
-              className="border bg-background/90 text-[11px] font-medium capitalize shadow-xs backdrop-blur-xs"
-            >
-              {product.category}
-            </Badge>
-          </div>
         </div>
 
-        <div className="flex flex-col p-4">
-          <div className="mb-2">
-            <StarRating
-              rate={product.rating?.rate}
-              count={product.rating?.count}
-              size="sm"
-            />
+        {/* Content */}
+        <div className="mt-3 flex flex-col gap-1.5">
+          <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <span className="capitalize">{product.category}</span>
+            {product.rating && (
+              <div className="flex items-center gap-1">
+                <StarRating
+                  rate={product.rating.rate}
+                  size="sm"
+                  showText={false}
+                />
+                <span className="font-medium text-foreground">
+                  {product.rating.rate.toFixed(1)}
+                </span>
+                <span>({product.rating.count})</span>
+              </div>
+            )}
           </div>
 
-          <h3 className="line-clamp-2 text-sm font-semibold text-card-foreground transition-colors group-hover:text-primary">
+          <h3 className="line-clamp-2 text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
             <Link
               href={`/products/${product.id}`}
               className="focus:outline-hidden"
             >
-              <span className="absolute inset-0" aria-hidden="true" />
               {product.title}
             </Link>
           </h3>
+
+          <div className="mt-1">
+            <span className="text-lg font-bold text-foreground">
+              ${product.price.toFixed(2)}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="mt-auto flex items-center justify-between border-t border-border/60 bg-muted/20 p-4 pt-3">
-        <div>
-          <span className="block text-xs text-muted-foreground">Price</span>
-          <span className="text-base font-bold text-foreground">
-            ${product.price.toFixed(2)}
-          </span>
-        </div>
-        <QuickAddToCart product={product} />
+      {/* Project Theme Add to Cart Button */}
+      <div className="mt-4 pt-1">
+        <QuickAddToCart product={product} fullWidth />
       </div>
     </article>
   )

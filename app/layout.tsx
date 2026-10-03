@@ -45,21 +45,20 @@ export const metadata: Metadata = {
     template: "%s | FakeStore Direct",
   },
   description:
-    "Explore premium electronics, jewelery, men's and women's clothing with real-time filtering, instant shopping cart, and Next.js SSR performance.",
+    "Explore premium electronics, jewelry, men's and women's clothing with instant shopping cart and fast delivery.",
   keywords: [
     "e-commerce",
     "electronics",
-    "jewelery",
+    "jewelry",
     "clothing",
     "shopping cart",
-    "next.js",
   ],
   openGraph: {
     type: "website",
     siteName: "FakeStore Direct",
     title: "FakeStore Direct | Premium E-Commerce Catalog",
     description:
-      "Explore premium electronics, jewelery, and clothing with real-time client filtering and local shopping cart.",
+      "Explore premium electronics, jewelry, and clothing with instant shopping cart.",
   },
   robots: {
     index: true,
