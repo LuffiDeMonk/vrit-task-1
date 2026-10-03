@@ -1,0 +1,21 @@
+import type { Product } from "./product"
+
+export interface CartItem {
+  product: Product
+  quantity: number
+}
+
+export interface CartState {
+  items: CartItem[]
+  isHydrated: boolean
+}
+
+export interface CartActions {
+  addItem: (product: Product, quantity?: number) => void
+  removeItem: (productId: number) => void
+  updateQuantity: (productId: number, quantity: number) => void
+  clearCart: () => void
+  setHydrated: (state: boolean) => void
+}
+
+export type CartStore = CartState & CartActions
