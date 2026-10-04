@@ -1,4 +1,4 @@
-import * as React from "react"
+import type { HTMLAttributes } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
@@ -31,7 +31,7 @@ function Badge({
   className,
   variant = "default",
   ...props
-}: React.HTMLAttributes<HTMLSpanElement> & VariantProps<typeof badgeVariants>) {
+}: HTMLAttributes<HTMLSpanElement> & VariantProps<typeof badgeVariants>) {
   return (
     <span
       className={cn(badgeVariants({ variant }), className)}

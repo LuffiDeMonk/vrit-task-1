@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import { ErrorMessage } from "@/components/common/error-message"
 
 export default function ProductsError({

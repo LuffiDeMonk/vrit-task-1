@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useSyncExternalStore } from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/shared/button"
@@ -10,7 +10,7 @@ const emptySubscribe = () => () => {}
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme()
-  const mounted = React.useSyncExternalStore(
+  const mounted = useSyncExternalStore(
     emptySubscribe,
     () => true,
     () => false

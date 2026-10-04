@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import { useState } from "react"
 import { ProductCard } from "@/components/common/product-card"
 import { EmptyState } from "@/components/common/empty-state"
 import { AmazonSidebar } from "@/app/products/_components/amazon-sidebar"

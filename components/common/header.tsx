@@ -1,4 +1,3 @@
-import React from "react"
 import Link from "next/link"
 import { ShoppingBag } from "lucide-react"
 import { HeaderNav } from "@/components/common/header-nav"

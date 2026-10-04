@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useState, type ReactNode } from "react"
 import { AlertCircle, AlertTriangle, CheckCircle2, Info, X } from "lucide-react"
 import {
   Alert as ShadcnAlert,
@@ -8,19 +8,19 @@ import {
   AlertTitle,
   alertVariants,
   type AlertProps as ShadcnAlertProps,
-} from "../../ui/alert"
-import { cn } from "../../../lib/utils"
-import { Button } from "../button"
+} from "@/components/ui/alert"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/shared/button"
 
 export interface AlertProps extends ShadcnAlertProps {
   title?: string
   description?: string
-  icon?: React.ReactNode
+  icon?: ReactNode
   onClose?: () => void
   dismissible?: boolean
 }
 
-const defaultIcons: Record<string, React.ReactNode> = {
+const defaultIcons: Record<string, ReactNode> = {
   default: null,
   destructive: <AlertCircle className="size-4 shrink-0" aria-hidden="true" />,
   success: <CheckCircle2 className="size-4 shrink-0" aria-hidden="true" />,
@@ -41,7 +41,7 @@ export function Alert({
   ref,
   ...props
 }: AlertProps) {
-  const [dismissed, setDismissed] = React.useState(false)
+  const [dismissed, setDismissed] = useState(false)
 
   if (dismissed) {
     return null
@@ -61,7 +61,6 @@ export function Alert({
       ref={ref}
       variant={variant}
       size={size}
-      // className={cn(resolvedIcon && "flex items-start gap-3", className)}
       className={cn({
         "flex items-start gap-3": resolvedIcon,
         className,
@@ -81,8 +80,8 @@ export function Alert({
           type="button"
           aria-label="Dismiss alert"
           onClick={handleClose}
-          variant={"ghost"}
-          size={"icon"}
+          variant="ghost"
+          size="icon"
           className="hover:bg-transparent"
         >
           <X className="size-4" />

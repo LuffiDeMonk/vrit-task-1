@@ -1,4 +1,4 @@
-import React, { Suspense } from "react"
+import { Suspense } from "react"
 import { LoginForm } from "@/app/login/_components/login-form"
 import type { Metadata } from "next"
 

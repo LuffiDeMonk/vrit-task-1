@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useTransition } from "react"
+import { useTransition } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { SlidersHorizontal } from "lucide-react"
 import { Select, type SelectOption } from "@/components/shared/select"

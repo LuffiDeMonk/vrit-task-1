@@ -1,4 +1,3 @@
-import React from "react"
 import { Breadcrumb } from "@/components/shared/breadcrumb"
 import { ProductImage } from "@/app/products/[id]/_components/product-image"
 import { ProductInfo } from "@/app/products/[id]/_components/product-info"

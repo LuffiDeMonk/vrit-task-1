@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ShoppingCart, Check, Minus, Plus, LogIn } from "lucide-react"
 import { Button } from "@/components/shared/button"

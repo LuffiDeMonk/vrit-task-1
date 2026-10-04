@@ -1,4 +1,3 @@
-import React from "react"
 import Link from "next/link"
 import { Badge } from "@/components/shared/badge"
 import { StarRating } from "@/components/common/star-rating"

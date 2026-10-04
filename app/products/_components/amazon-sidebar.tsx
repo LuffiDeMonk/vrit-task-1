@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import { useState } from "react"
 import { RotateCcw, Filter, Check } from "lucide-react"
 import { Button } from "@/components/shared/button"
 import { Input } from "@/components/shared/input"

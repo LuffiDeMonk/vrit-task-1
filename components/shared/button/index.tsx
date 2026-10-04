@@ -1,12 +1,17 @@
-import * as React from "react"
-import type { ButtonHTMLAttributes, ReactNode } from "react"
+import {
+  Children,
+  isValidElement,
+  type ButtonHTMLAttributes,
+  type ReactElement,
+  type ReactNode,
+} from "react"
 import type { VariantProps } from "class-variance-authority"
 import {
   Button as ShadcnButton,
   buttonVariants,
-} from "../../../components/ui/button"
-import { Spinner } from "../../../components/ui/spinner"
-import { cn } from "../../../lib/utils"
+} from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+import { cn } from "@/lib/utils"
 
 export interface ButtonProps
   extends
@@ -22,7 +27,7 @@ export interface ButtonProps
 }
 
 function isIconElement(element: ReactNode): boolean {
-  if (!React.isValidElement(element)) return false
+  if (!isValidElement(element)) return false
   if (element.type === "svg") return true
 
   const type = element.type as any
@@ -118,13 +123,13 @@ export function Button({
     }
 
     if (loading) {
-      const childrenArray = React.Children.toArray(children)
+      const childrenArray = Children.toArray(children)
       let replaced = false
 
       const processed = childrenArray.map((child, idx) => {
         if (!replaced && isIconElement(child)) {
           replaced = true
-          const childProps = (child as React.ReactElement).props as Record<
+          const childProps = (child as ReactElement).props as Record<
             string,
             any
           >

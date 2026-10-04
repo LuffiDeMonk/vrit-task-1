@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import { useState } from "react"
 import { SlidersHorizontal, Check } from "lucide-react"
 import { Drawer } from "@/components/shared/drawer"
 import { Button } from "@/components/shared/button"

@@ -1,6 +1,13 @@
 "use client"
 
-import * as React from "react"
+import {
+  Fragment,
+  isValidElement,
+  type ReactNode,
+  type ComponentType,
+  type MouseEvent,
+  type ComponentPropsWithoutRef,
+} from "react"
 import { ChevronRightIcon } from "lucide-react"
 import {
   Breadcrumb as ShadcnBreadcrumb,
@@ -10,14 +17,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
-} from "../../ui/breadcrumb"
-import { cn } from "../../../lib/utils"
+} from "@/components/ui/breadcrumb"
+import { cn } from "@/lib/utils"
 
 export interface BreadcrumbItemType {
-  label: React.ReactNode
+  label: ReactNode
   href?: string
-  onClick?: (event: React.MouseEvent<HTMLElement>) => void
-  icon?: React.ReactNode | React.ComponentType<{ className?: string }>
+  onClick?: (event: MouseEvent<HTMLElement>) => void
+  icon?: ReactNode | ComponentType<{ className?: string }>
   isCurrentPage?: boolean
   target?: string
   rel?: string
@@ -26,12 +33,12 @@ export interface BreadcrumbItemType {
 }
 
 export interface BreadcrumbProps extends Omit<
-  React.ComponentPropsWithoutRef<"nav">,
+  ComponentPropsWithoutRef<"nav">,
   "children"
 > {
   items: BreadcrumbItemType[]
-  icon?: React.ReactNode | React.ComponentType<{ className?: string }>
-  separatorIcon?: React.ReactNode | React.ComponentType<{ className?: string }>
+  icon?: ReactNode | ComponentType<{ className?: string }>
+  separatorIcon?: ReactNode | ComponentType<{ className?: string }>
   maxItems?: number
   itemsBeforeCollapse?: number
   itemsAfterCollapse?: number
@@ -39,17 +46,17 @@ export interface BreadcrumbProps extends Omit<
 }
 
 function resolveIcon(
-  iconProp?: React.ReactNode | React.ComponentType<{ className?: string }>
-): React.ReactNode {
+  iconProp?: ReactNode | ComponentType<{ className?: string }>
+): ReactNode {
   if (!iconProp) return null
-  if (React.isValidElement(iconProp)) return iconProp
+  if (isValidElement(iconProp)) return iconProp
   if (typeof iconProp === "function") {
-    const IconComponent = iconProp as React.ComponentType<{
+    const IconComponent = iconProp as ComponentType<{
       className?: string
     }>
     return <IconComponent className="size-3.5" />
   }
-  return iconProp as React.ReactNode
+  return iconProp as ReactNode
 }
 
 export function Breadcrumb({
@@ -136,12 +143,12 @@ export function Breadcrumb({
       >
         <BreadcrumbList className={listClassName}>
           {startItems.map((item, idx) => (
-            <React.Fragment key={item.href ?? `${item.label}-${idx}`}>
+            <Fragment key={item.href ?? `${item.label}-${idx}`}>
               <BreadcrumbItem className={item.className}>
                 {renderItemContent(item, idx)}
               </BreadcrumbItem>
               <BreadcrumbSeparator>{resolvedSeparator}</BreadcrumbSeparator>
-            </React.Fragment>
+            </Fragment>
           ))}
 
           <BreadcrumbItem>
@@ -153,14 +160,14 @@ export function Breadcrumb({
             const actualIndex = startIndexOffset + idx
             const isLast = idx === endItems.length - 1
             return (
-              <React.Fragment key={item.href ?? `${item.label}-${actualIndex}`}>
+              <Fragment key={item.href ?? `${item.label}-${actualIndex}`}>
                 <BreadcrumbItem className={item.className}>
                   {renderItemContent(item, actualIndex)}
                 </BreadcrumbItem>
                 {!isLast && (
                   <BreadcrumbSeparator>{resolvedSeparator}</BreadcrumbSeparator>
                 )}
-              </React.Fragment>
+              </Fragment>
             )
           })}
         </BreadcrumbList>
@@ -178,14 +185,14 @@ export function Breadcrumb({
         {items.map((item, index) => {
           const isLast = index === items.length - 1
           return (
-            <React.Fragment key={item.href ?? `${item.label}-${index}`}>
+            <Fragment key={item.href ?? `${item.label}-${index}`}>
               <BreadcrumbItem className={item.className}>
                 {renderItemContent(item, index)}
               </BreadcrumbItem>
               {!isLast && (
                 <BreadcrumbSeparator>{resolvedSeparator}</BreadcrumbSeparator>
               )}
-            </React.Fragment>
+            </Fragment>
           )
         })}
       </BreadcrumbList>

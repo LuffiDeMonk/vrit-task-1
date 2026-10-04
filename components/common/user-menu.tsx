@@ -1,6 +1,5 @@
 "use client"
 
-import React from "react"
 import Link from "next/link"
 import { LogIn, LogOut, ShoppingCart, Package, ChevronDown } from "lucide-react"
 import { useRouter } from "next/navigation"

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useTransition } from "react"
+import { useState, useTransition, type FormEvent } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { LogIn, KeyRound, User } from "lucide-react"
 import { Input } from "@/components/shared/input"
@@ -28,7 +28,7 @@ export function LoginForm() {
     setErrorMessage(null)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setErrorMessage(null)
 

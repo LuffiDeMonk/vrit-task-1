@@ -1,4 +1,4 @@
-import React from "react"
+import type { ReactNode } from "react"
 import { PackageSearch } from "lucide-react"
 import { Button } from "@/components/shared/button"
 
@@ -7,7 +7,7 @@ interface EmptyStateProps {
   description?: string
   actionLabel?: string
   onAction?: () => void
-  icon?: React.ReactNode
+  icon?: ReactNode
 }
 
 export function EmptyState({

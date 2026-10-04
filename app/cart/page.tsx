@@ -1,4 +1,3 @@
-import React from "react"
 import { CartView } from "@/app/cart/_components/cart-view"
 import type { Metadata } from "next"
 

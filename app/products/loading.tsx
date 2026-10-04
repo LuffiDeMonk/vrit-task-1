@@ -1,4 +1,3 @@
-import React from "react"
 import { ProductListSkeleton } from "@/app/products/_components/product-list-skeleton"
 import { Skeleton } from "@/components/ui/skeleton"
 

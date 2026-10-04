@@ -1,9 +1,9 @@
 "use client"
 
-import * as React from "react"
+import type { ComponentProps, ReactNode } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { Label as ShadcnLabel } from "../../../components/ui/label"
-import { cn } from "../../../lib/utils"
+import { Label as ShadcnLabel } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 
 export const labelVariants = cva(
   "leading-none select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
@@ -38,11 +38,11 @@ export const labelVariants = cva(
 
 export interface LabelProps
   extends
-    React.ComponentProps<typeof ShadcnLabel>,
+    ComponentProps<typeof ShadcnLabel>,
     VariantProps<typeof labelVariants> {
   required?: boolean
   optional?: boolean
-  description?: React.ReactNode
+  description?: ReactNode
 }
 
 export function Label({

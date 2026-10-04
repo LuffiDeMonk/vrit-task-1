@@ -1,4 +1,4 @@
-import * as React from "react"
+import type { ComponentProps } from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -60,7 +60,7 @@ function Button({
       <Slot
         data-slot="button"
         className={cn(buttonVariants({ variant, size, className }))}
-        {...(props as React.ComponentProps<typeof Slot>)}
+        {...(props as ComponentProps<typeof Slot>)}
       />
     )
   }

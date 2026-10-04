@@ -1,21 +1,21 @@
 "use client"
 
-import * as React from "react"
+import type { ComponentPropsWithoutRef, ReactNode } from "react"
 import {
   Avatar as BaseAvatar,
   AvatarImage,
   AvatarFallback,
-} from "../../ui/avatar"
-import { cn } from "../../../lib/utils"
+} from "@/components/ui/avatar"
+import { cn } from "@/lib/utils"
 
-export interface AvatarProps extends React.ComponentPropsWithoutRef<
+export interface AvatarProps extends ComponentPropsWithoutRef<
   typeof BaseAvatar
 > {
   name?: string | null
   imageUrl?: string | null
   src?: string | null
   alt?: string
-  fallback?: React.ReactNode
+  fallback?: ReactNode
   fallbackClassName?: string
 }
 

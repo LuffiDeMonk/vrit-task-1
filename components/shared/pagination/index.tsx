@@ -1,18 +1,16 @@
 "use client"
 
-import * as React from "react"
-import type { ReactNode } from "react"
+import { useMemo, type ReactNode } from "react"
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
-
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationLink,
   PaginationEllipsis,
-} from "../../../components/ui/pagination"
-import { Select, type SelectOption } from "../select"
-import { cn } from "../../../lib/utils"
+} from "@/components/ui/pagination"
+import { Select, type SelectOption } from "@/components/shared/select"
+import { cn } from "@/lib/utils"
 
 export interface PaginationProps {
   currentPage: number
@@ -99,7 +97,7 @@ export function PaginationComponent({
     }
   }
 
-  const effectivePageSizeOptions = React.useMemo(() => {
+  const effectivePageSizeOptions = useMemo(() => {
     const set = new Set(pageSizeOptions)
     if (itemsPerPage && Number.isFinite(itemsPerPage) && itemsPerPage > 0) {
       set.add(itemsPerPage)
@@ -107,7 +105,7 @@ export function PaginationComponent({
     return Array.from(set).sort((a, b) => a - b)
   }, [pageSizeOptions, itemsPerPage])
 
-  const pageSizeSelectOptions: SelectOption[] = React.useMemo(
+  const pageSizeSelectOptions: SelectOption[] = useMemo(
     () =>
       effectivePageSizeOptions.map((size) => ({
         label: String(size),

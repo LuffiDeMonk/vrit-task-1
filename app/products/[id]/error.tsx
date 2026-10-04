@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import Link from "next/link"
 import { ArrowLeft, RefreshCw, AlertCircle } from "lucide-react"
 import { Button, buttonVariants } from "@/components/shared/button"

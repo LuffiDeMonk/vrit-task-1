@@ -1,4 +1,3 @@
-import React from "react"
 import { notFound } from "next/navigation"
 import { getProduct } from "@/lib/api/products"
 import { ProductDetail } from "@/app/products/[id]/_components/product-detail"

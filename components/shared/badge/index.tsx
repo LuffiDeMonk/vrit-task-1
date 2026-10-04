@@ -2,10 +2,8 @@ import type { HTMLAttributes, ReactNode } from "react"
 import {
   Badge as ShadcnBadge,
   badgeVariants,
-} from "../../../components/ui/badge"
-
-import { cn } from "../../../lib/utils"
-
+} from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 import type { VariantProps } from "class-variance-authority"
 
 export interface BadgeProps

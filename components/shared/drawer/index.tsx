@@ -1,13 +1,13 @@
 "use client"
 
-import React, {
-  ComponentProps,
-  CSSProperties,
+import {
+  type ComponentProps,
+  type CSSProperties,
   isValidElement,
-  KeyboardEvent,
-  MouseEvent,
-  ReactElement,
-  ReactNode,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactElement,
+  type ReactNode,
   useCallback,
   useState,
 } from "react"
@@ -21,8 +21,8 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "../../ui/drawer"
-import { cn } from "../../../lib/utils"
+} from "@/components/ui/drawer"
+import { cn } from "@/lib/utils"
 
 export type DrawerPlacement = "top" | "right" | "bottom" | "left"
 export type DrawerSize = "default" | "large"
@@ -207,7 +207,6 @@ export function Drawer({
 
   const handleOpenChange = useCallback(
     (nextOpen: boolean, eventDetails?: any) => {
-      // If escape key is pressed and keyboard is disabled, prevent closing
       if (
         !nextOpen &&
         keyboard === false &&
@@ -216,7 +215,6 @@ export function Drawer({
         return
       }
 
-      // If clicked outside and maskClosable is disabled, prevent closing
       if (
         !nextOpen &&
         maskClosable === false &&

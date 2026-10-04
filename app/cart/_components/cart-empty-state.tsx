@@ -1,4 +1,3 @@
-import React from "react"
 import Link from "next/link"
 import { ShoppingBag, ArrowRight } from "lucide-react"
 import { buttonVariants } from "@/components/shared/button"

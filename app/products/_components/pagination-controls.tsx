@@ -1,6 +1,5 @@
 "use client"
 
-import React from "react"
 import { Pagination } from "@/components/shared/pagination"
 
 interface PaginationControlsProps {

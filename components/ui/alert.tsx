@@ -1,6 +1,6 @@
-import * as React from "react"
+import type { HTMLAttributes, Ref } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "../../lib/utils"
+import { cn } from "@/lib/utils"
 
 const alertVariants = cva(
   "relative w-full rounded-lg border text-sm transition-all [&>svg]:size-4 [&>svg]:shrink-0",
@@ -31,9 +31,9 @@ const alertVariants = cva(
 
 export interface AlertProps
   extends
-    React.HTMLAttributes<HTMLDivElement>,
+    HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof alertVariants> {
-  ref?: React.Ref<HTMLDivElement>
+  ref?: Ref<HTMLDivElement>
 }
 
 export function Alert({
@@ -57,8 +57,8 @@ export function Alert({
   )
 }
 
-export interface AlertTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  ref?: React.Ref<HTMLHeadingElement>
+export interface AlertTitleProps extends HTMLAttributes<HTMLHeadingElement> {
+  ref?: Ref<HTMLHeadingElement>
 }
 
 export function AlertTitle({ className, ref, ...props }: AlertTitleProps) {
@@ -75,15 +75,14 @@ export function AlertTitle({ className, ref, ...props }: AlertTitleProps) {
   )
 }
 
-export interface AlertDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
-  ref?: React.Ref<HTMLParagraphElement>
+export interface AlertDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
+  ref?: Ref<HTMLParagraphElement>
 }
 
 export function AlertDescription({
   className,
   ref,
-  ...props
-}: AlertDescriptionProps) {
+  ...props }: AlertDescriptionProps) {
   return (
     <div
       ref={ref}

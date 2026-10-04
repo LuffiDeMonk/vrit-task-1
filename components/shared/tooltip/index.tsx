@@ -1,8 +1,18 @@
 "use client"
 
-import * as React from "react"
+import {
+  useState,
+  useRef,
+  useCallback,
+  isValidElement,
+  type ReactNode,
+  type CSSProperties,
+  type MouseEvent,
+  type PointerEvent,
+  type FocusEvent,
+} from "react"
 import * as TooltipPrimitive from "@radix-ui/react-tooltip"
-import { cn } from "../../../lib/utils"
+import { cn } from "@/lib/utils"
 
 export type TooltipPlacement =
   | "top"
@@ -58,7 +68,7 @@ const PRESET_COLORS: Record<string, string> = {
 }
 
 export interface TooltipProps {
-  title?: React.ReactNode | (() => React.ReactNode)
+  title?: ReactNode | (() => ReactNode)
   placement?: TooltipPlacement
   trigger?: TooltipTriggerType | TooltipTriggerType[]
   open?: boolean
@@ -70,10 +80,10 @@ export interface TooltipProps {
   mouseLeaveDelay?: number
   overlayClassName?: string
   className?: string
-  overlayStyle?: React.CSSProperties
-  style?: React.CSSProperties
+  overlayStyle?: CSSProperties
+  style?: CSSProperties
   zIndex?: number
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export function Tooltip({
@@ -94,7 +104,7 @@ export function Tooltip({
   zIndex = 50,
   children,
 }: TooltipProps) {
-  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen)
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
 
   const isControlled = controlledOpen !== undefined
   const isOpen = isControlled ? controlledOpen : uncontrolledOpen
@@ -105,9 +115,9 @@ export function Tooltip({
   const triggerClick = triggers.includes("click")
   const triggerContextMenu = triggers.includes("contextMenu")
 
-  const triggerRef = React.useRef<HTMLButtonElement | null>(null)
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
 
-  const handleOpenChange = React.useCallback(
+  const handleOpenChange = useCallback(
     (nextOpen: boolean) => {
       if (!isControlled) {
         setUncontrolledOpen(nextOpen)
@@ -131,38 +141,38 @@ export function Tooltip({
 
   const resolvedBgColor = color ? PRESET_COLORS[color] || color : undefined
 
-  const handleClick = (_e: React.MouseEvent) => {
+  const handleClick = (_e: MouseEvent) => {
     if (triggerClick) {
       handleOpenChange(!isOpen)
     }
   }
 
-  const handlePointerDown = (e: React.PointerEvent) => {
+  const handlePointerDown = (e: PointerEvent) => {
     if (triggerClick) {
       e.preventDefault()
     }
   }
 
-  const handlePointerMove = (e: React.PointerEvent) => {
+  const handlePointerMove = (e: PointerEvent) => {
     if (!triggerHover) {
       e.preventDefault()
     }
   }
 
-  const handlePointerLeave = (e: React.PointerEvent) => {
+  const handlePointerLeave = (e: PointerEvent) => {
     if (!triggerHover) {
       e.preventDefault()
     }
   }
 
-  const handleContextMenu = (e: React.MouseEvent) => {
+  const handleContextMenu = (e: MouseEvent) => {
     if (triggerContextMenu) {
       e.preventDefault()
       handleOpenChange(!isOpen)
     }
   }
 
-  const handleFocus = (e: React.FocusEvent) => {
+  const handleFocus = (e: FocusEvent) => {
     if (!triggerFocus) {
       e.preventDefault()
     } else {
@@ -170,7 +180,7 @@ export function Tooltip({
     }
   }
 
-  const handleBlur = (e: React.FocusEvent) => {
+  const handleBlur = (e: FocusEvent) => {
     if (!triggerFocus) {
       e.preventDefault()
     } else if (!triggerClick) {
@@ -178,7 +188,7 @@ export function Tooltip({
     }
   }
 
-  const triggerElement = React.isValidElement(children) ? (
+  const triggerElement = isValidElement(children) ? (
     children
   ) : (
     <span>{children}</span>

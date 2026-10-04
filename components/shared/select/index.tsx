@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useState, useMemo } from "react"
 import { ChevronDown, X } from "lucide-react"
 
 import {
@@ -15,11 +15,11 @@ import {
   ComboboxTrigger,
   ComboboxValue,
   useComboboxAnchor,
-} from "../../ui/combobox"
+} from "@/components/ui/combobox"
 
-import { Badge } from "../badge"
-import { Label } from "../label"
-import { cn } from "../../../lib/utils"
+import { Badge } from "@/components/shared/badge"
+import { Label } from "@/components/shared/label"
+import { cn } from "@/lib/utils"
 
 export interface SelectOption {
   label: string
@@ -83,9 +83,9 @@ export function Select(props: SelectProps) {
   } = props
 
   const anchorRef = useComboboxAnchor()
-  const [searchQuery, setSearchQuery] = React.useState("")
+  const [searchQuery, setSearchQuery] = useState("")
 
-  const filteredOptions = React.useMemo(() => {
+  const filteredOptions = useMemo(() => {
     if (!searchable || !searchQuery) return options
     return options.filter((o) =>
       o.label.toLowerCase().includes(searchQuery.toLowerCase())

@@ -1,6 +1,13 @@
 "use client"
 
-import * as React from "react"
+import {
+  useMemo,
+  isValidElement,
+  type ReactNode,
+  type ReactElement,
+  type MouseEvent,
+  type MouseEventHandler,
+} from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,10 +20,10 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "../../ui/dropdown-menu"
-import { Button, type ButtonProps } from "../button"
-import { Avatar, type AvatarProps } from "../avatar"
-import { cn } from "../../../lib/utils"
+} from "@/components/ui/dropdown-menu"
+import { Button, type ButtonProps } from "@/components/shared/button"
+import { Avatar, type AvatarProps } from "@/components/shared/avatar"
+import { cn } from "@/lib/utils"
 import { ChevronDown } from "lucide-react"
 
 export type DropdownPlacement =
@@ -34,15 +41,15 @@ export type DropdownTriggerType = DropdownTriggerMode
 
 export interface DropdownMenuItemType {
   key: string
-  label: React.ReactNode
-  icon?: React.ReactNode
+  label: ReactNode
+  icon?: ReactNode
   disabled?: boolean
   danger?: boolean
-  extra?: React.ReactNode
+  extra?: ReactNode
   children?: DropdownItemType[]
   onClick?: (info: {
     key: string
-    domEvent: React.MouseEvent<HTMLElement>
+    domEvent: MouseEvent<HTMLElement>
   }) => void
   className?: string
   title?: string
@@ -58,7 +65,7 @@ export interface DropdownMenuDividerType {
 export interface DropdownMenuGroupType {
   type: "group"
   key?: string
-  label?: React.ReactNode
+  label?: ReactNode
   children: DropdownItemType[]
   className?: string
 }
@@ -70,22 +77,22 @@ export interface DropdownMenuProps {
   items: DropdownItemType[]
   onClick?: (info: {
     key: string
-    domEvent: React.MouseEvent<HTMLElement>
+    domEvent: MouseEvent<HTMLElement>
   }) => void
   className?: string
 }
 
 export interface DropdownProps {
   menu: DropdownMenuProps
-  avatar?: AvatarProps | React.ReactElement
+  avatar?: AvatarProps | ReactElement
   trigger?: DropdownTriggerMode[]
   placement?: DropdownPlacement
   disabled?: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void
-  dropdownRender?: (originNode: React.ReactNode) => React.ReactNode
+  dropdownRender?: (originNode: ReactNode) => ReactNode
   overlayClassName?: string
-  children?: React.ReactNode
+  children?: ReactNode
   className?: string
   nativeButton?: boolean
 }
@@ -131,24 +138,24 @@ export function Dropdown({
   const { side, align } = getPlacementProps(placement)
   const isHover = trigger.includes("hover")
 
-  let triggerElement: React.ReactNode = children
+  let triggerElement: ReactNode = children
   if (avatar) {
-    if (React.isValidElement(avatar)) {
+    if (isValidElement(avatar)) {
       triggerElement = avatar
     } else {
       triggerElement = <Avatar {...avatar} />
     }
   }
 
-  const isElement = React.isValidElement(triggerElement)
+  const isElement = isValidElement(triggerElement)
 
-  const isNativeButton = React.useMemo(() => {
+  const isNativeButton = useMemo(() => {
     if (nativeButtonProp !== undefined) return nativeButtonProp
     if (avatar) return false
     if (!isElement) {
       return true
     }
-    const elem = triggerElement as React.ReactElement
+    const elem = triggerElement as ReactElement
     const type = elem.type
     if (typeof type === "string") {
       return type === "button"
@@ -262,7 +269,7 @@ export function Dropdown({
         openOnHover={isHover}
         nativeButton={isNativeButton}
         className={cn("cursor-pointer select-none", className)}
-        render={isElement ? (triggerElement as React.ReactElement) : undefined}
+        render={isElement ? (triggerElement as ReactElement) : undefined}
       >
         {!isElement ? triggerElement : undefined}
       </DropdownMenuTrigger>
@@ -281,12 +288,12 @@ export interface DropdownButtonProps extends Omit<ButtonProps, "onClick"> {
   menu: DropdownMenuProps
   trigger?: DropdownTriggerMode[]
   placement?: DropdownPlacement
-  icon?: React.ReactNode
+  icon?: ReactNode
   overlayClassName?: string
-  dropdownRender?: (menuNode: React.ReactNode) => React.ReactNode
+  dropdownRender?: (menuNode: ReactNode) => ReactNode
   onOpenChange?: (open: boolean) => void
   open?: boolean
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  onClick?: MouseEventHandler<HTMLButtonElement>
 }
 
 export function DropdownButton({

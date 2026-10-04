@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import { useState, type MouseEvent } from "react"
 import { useRouter } from "next/navigation"
 import { ShoppingCart, Check } from "lucide-react"
 import { Button } from "@/components/shared/button"
@@ -26,7 +26,7 @@ export function QuickAddToCart({
   const { addItem } = useCart()
   const { isAuthenticated } = useAuth()
 
-  const handleQuickAdd = (e: React.MouseEvent) => {
+  const handleQuickAdd = (e: MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
 

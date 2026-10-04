@@ -1,12 +1,16 @@
 "use client"
 
-import * as React from "react"
+import type {
+  ComponentProps,
+  WheelEvent,
+  KeyboardEvent,
+  ClipboardEvent,
+} from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "../../lib/utils"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
-import { Button } from "../../components/ui/button"
-
-function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
+function InputGroup({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
       data-slot="input-group"
@@ -45,7 +49,7 @@ function InputGroupAddon({
   className,
   align = "inline-start",
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
+}: ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
   return (
     <div
       role="group"
@@ -64,15 +68,18 @@ function InputGroupAddon({
 }
 
 const inputGroupButtonVariants = cva(
-  "flex items-center gap-2 text-sm shadow-none",
+  "text-sm shadow-none flex items-center justify-center",
   {
     variants: {
       size: {
-        xs: "h-6 gap-1 rounded-[calc(var(--radius)-3px)] px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
-        sm: "",
-        "icon-xs":
-          "size-6 rounded-[calc(var(--radius)-3px)] p-0 has-[>svg]:p-0",
-        "icon-sm": "size-8 p-0 has-[>svg]:p-0",
+        xs: "h-6 px-2 text-xs",
+        sm: "h-7 px-2.5 text-xs",
+        default: "h-8 px-3 text-sm",
+        lg: "h-9 px-3.5 text-base",
+        icon: "size-8",
+        "icon-xs": "size-6",
+        "icon-sm": "size-7",
+        "icon-lg": "size-9",
       },
     },
     defaultVariants: {
@@ -87,7 +94,7 @@ function InputGroupButton({
   variant = "ghost",
   size = "xs",
   ...props
-}: Omit<React.ComponentProps<typeof Button>, "size" | "type"> &
+}: Omit<ComponentProps<typeof Button>, "size" | "type"> &
   VariantProps<typeof inputGroupButtonVariants> & {
     type?: "button" | "submit" | "reset"
   }) {
@@ -102,7 +109,7 @@ function InputGroupButton({
   )
 }
 
-function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
+function InputGroupText({ className, ...props }: ComponentProps<"span">) {
   return (
     <span
       className={cn(
@@ -121,18 +128,18 @@ function InputGroupInput({
   onKeyDown,
   onPaste,
   ...props
-}: React.ComponentProps<"input">) {
-  const handleWheel = (e: React.WheelEvent<HTMLInputElement>) => {
+}: ComponentProps<"input">) {
+  const handleWheel = (e: WheelEvent<HTMLInputElement>) => {
     if (type === "number") {
       e.currentTarget.blur()
     }
     onWheel?.(e)
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (type === "number") {
       if (e.key === "e" || e.key === "E" || e.key === "+") {
-        e.preventDefault()
+        event?.preventDefault?.()
       }
       if (props.min !== undefined && Number(props.min) >= 0 && e.key === "-") {
         e.preventDefault()
@@ -144,7 +151,7 @@ function InputGroupInput({
     onKeyDown?.(e)
   }
 
-  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     if (type === "number") {
       const text = e.clipboardData.getData("text")
       const isNonNegative = props.min !== undefined && Number(props.min) >= 0
@@ -177,7 +184,7 @@ function InputGroupInput({
 function InputGroupTextarea({
   className,
   ...props
-}: React.ComponentProps<"textarea">) {
+}: ComponentProps<"textarea">) {
   return (
     <textarea
       data-slot="input-group-control"

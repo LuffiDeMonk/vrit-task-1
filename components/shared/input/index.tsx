@@ -1,16 +1,20 @@
 "use client"
 
-import { useId } from "react"
-
+import {
+  useId,
+  type ChangeEvent,
+  type ClipboardEvent,
+  type ComponentProps,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "../../../components/ui/input-group"
-import { Label } from "../label"
-import { cn } from "../../../lib/utils"
-
-import type { ChangeEvent, ComponentProps, ReactNode } from "react"
+} from "@/components/ui/input-group"
+import { Label } from "@/components/shared/label"
+import { cn } from "@/lib/utils"
 
 export interface InputProps extends ComponentProps<typeof InputGroupInput> {
   label?: ReactNode
@@ -81,7 +85,7 @@ export function Input({
     onChange?.(event)
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (type === "number") {
       if (event.key === "e" || event.key === "E" || event.key === "+") {
         event.preventDefault()
@@ -100,7 +104,7 @@ export function Input({
     props.onKeyDown?.(event)
   }
 
-  const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+  const handlePaste = (event: ClipboardEvent<HTMLInputElement>) => {
     if (type === "number") {
       const text = event.clipboardData.getData("text")
       const isNonNegative = props.min !== undefined && Number(props.min) >= 0

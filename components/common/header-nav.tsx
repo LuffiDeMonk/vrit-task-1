@@ -1,6 +1,6 @@
 "use client"
 
-import React, { Suspense } from "react"
+import { Suspense } from "react"
 import Link from "next/link"
 import { useRouter, usePathname, useSearchParams } from "next/navigation"
 import { ChevronDown } from "lucide-react"

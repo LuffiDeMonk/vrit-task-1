@@ -1,4 +1,3 @@
-import React from "react"
 import { getProducts, getCategories } from "@/lib/api/products"
 import { ProductGrid } from "@/app/products/_components/product-grid"
 import { Breadcrumb } from "@/components/shared/breadcrumb"

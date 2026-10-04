@@ -1,12 +1,12 @@
 "use client"
 
-import React, { useEffect } from "react"
+import { useEffect, type ReactNode } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface AuthGuardProps {
-  children: React.ReactNode
+  children: ReactNode
   fallbackUrl?: string
 }
 
