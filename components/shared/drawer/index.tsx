@@ -51,77 +51,41 @@ export interface DrawerClosableConfig {
 }
 
 export interface DrawerProps {
-  /** Controlled open state of the drawer */
   open?: boolean
-  /** Antd v4 compatibility alias for open */
   visible?: boolean
-  /** Initial open state when uncontrolled */
   defaultOpen?: boolean
-  /** Callback fired when drawer requests to be closed */
   onClose?: (e?: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>) => void
-  /** Callback fired when open state changes */
   onOpenChange?: (open: boolean) => void
-  /** Callback fired after the drawer finishes opening or closing */
   afterOpenChange?: (open: boolean) => void
-  /** The direction from which the drawer slides in */
   placement?: DrawerPlacement
-  /** Preset size of drawer ('default' = 378px, 'large' = 736px) */
   size?: DrawerSize
-  /** Custom width when placement is 'left' or 'right' */
   width?: number | string
-  /** Custom height when placement is 'top' or 'bottom' */
   height?: number | string
-  /** The title of the drawer header */
   title?: ReactNode
-  /** Accessible description for screen readers or secondary header text */
   description?: ReactNode
-  /** Extra content in the header (e.g. actions/buttons) */
   extra?: ReactNode
-  /** Footer content displayed at the bottom of drawer */
   footer?: ReactNode
-  /** Whether to show close button, or a configuration object */
   closable?: boolean | DrawerClosableConfig
-  /** Custom close icon */
   closeIcon?: ReactNode
-  /** Position of the close icon in the header */
   closeIconPosition?: "start" | "end"
-  /** Whether to show the background overlay mask */
   mask?: boolean
-  /** Whether clicking the mask closes the drawer */
   maskClosable?: boolean
-  /** Custom class name for the mask */
   maskClassName?: string
-  /** Custom style for the mask */
   maskStyle?: CSSProperties
-  /** Whether to destroy children components when closed */
   destroyOnClose?: boolean
-  /** Whether Esc key closes drawer */
   keyboard?: boolean
-  /** Custom z-index */
   zIndex?: number
-  /** Additional class name for drawer content container */
   className?: string
-  /** Additional style for drawer content container */
   style?: CSSProperties
-  /** Additional class name for root container */
   rootClassName?: string
-  /** Additional style for root container */
   rootStyle?: CSSProperties
-  /** Semantic sub-component class names */
   classNames?: DrawerClassNames
-  /** Semantic sub-component styles */
   styles?: DrawerStyles
-  /** Legacy alias for styles.header */
   headerStyle?: CSSProperties
-  /** Legacy alias for styles.body */
   bodyStyle?: CSSProperties
-  /** Legacy alias for styles.footer */
   footerStyle?: CSSProperties
-  /** Main body content */
   children?: ReactNode
-  /** Optional trigger element to open the drawer */
   trigger?: ReactNode
-  /** Whether to show drag/swipe handle indicator */
   showSwipeHandle?: boolean
 }
 
